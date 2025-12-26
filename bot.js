@@ -2,6 +2,7 @@ require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 const mongoose = require('mongoose');
 const Game = require('./models/Game');
+const express = require('express');
 
 // Підключення до MongoDB
 mongoose.connect(process.env.MONGODB_URI)
@@ -10,6 +11,18 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // Створення бота
 const bot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
+
+// HTTP сервер для Render
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.send('🎅 Secret Santa Bot is running!');
+});
+
+app.listen(PORT, () => {
+  console.log(`🌐 HTTP сервер запущено на порту ${PORT}`);
+});
 
 console.log('🎅 Бот Секретного Санти запущено!');
 
